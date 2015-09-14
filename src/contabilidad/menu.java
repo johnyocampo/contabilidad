@@ -22,7 +22,7 @@ public class menu {
         String password = "12345";
         String url = "jdbc:mysql://localhost/inventario";
         String user2 = "ocampojohny";
-        String password2 = "cangrejo.1";
+        String password2 = "123456789";
             String url2 = "jdbc:mysql://db4free.net/base_ocampo";
         String nombre;
         int cantidad, valor;
