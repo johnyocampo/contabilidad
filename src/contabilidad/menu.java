@@ -10,12 +10,30 @@ package contabilidad;
  * @author practi10
  */
 import java.util.Scanner;
+import java.sql.*;
+
+
 public class menu {
- 
+      
+    
+    
+    Scanner lector = new Scanner(System.in);
+        String user = "root";
+        String password = "12345";
+        String url = "jdbc:mysql://localhost/inventario";
+        String user2 = "ocampojohny";
+        String password2 = "cangrejo.1";
+        String url2 = "jdbc:mysql://db4free.net/inventario";
+        String nombre;
+        int cantidad, valor;
+        String comparador;
+        int ganancias=0;
+        
+        
     public void mostrar_menu()
     {
       
-    producto[] copia =new producto[100];    
+    
         
     System.out.println("\nBienvenido al programa de contabilidad \n"
             + "Ingrese el numero de la acción que corresponde a la acción que"
@@ -27,122 +45,234 @@ public class menu {
     
     }
     
-    public void mostrar_inventario(producto[] productos,int num_productos){
+    public void mostrar_inventario(){
         
-        int i;
-        
-        for(i=0;i<num_productos;i++){
-        productos[i].mostrar_datos();
+    try {
+            //Prueba de conexion
             
-        }
-    }
-    
-    public void buscar_producto(producto[] productos,int num_productos){
-       
-        Scanner entrada=new Scanner(System.in);
-        String nombre;
-        
-        
-        int i;
-        
-        
-        System.out.println("Por favor ingrese solo el nombre del producto "
-                + "del cual quiere informacion ");
-        nombre=entrada.nextLine();
-        for(i=0;i<num_productos;i++){
-            if(productos[i].nombre.equals(nombre))
-            productos[i].mostrar_datos();
-          
-        }
-        
-        
-    
-    }
-    
-    public void eliminar_producto(producto[] productos,int num_productos){
-       
-        Scanner entrada=new Scanner(System.in);
-        String nombre;
-        
-        
-        int i;
-        boolean verificacion=false;
-        
-        System.out.println("Por favor ingrese solo el nombre del producto que "
-                + "desea eliminar ");
-        nombre=entrada.nextLine();
-        for(i=0;i<num_productos;i++){
-            if(productos[i].nombre.equals(nombre)){
-            verificacion=true;
-            productos[i].nombre="";
-            productos[i].cantidad=0;
-            productos[i].precio_unidad=0;
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url,user,password);
+               
             
+            ResultSet resultado;           
+            Statement estado = con.createStatement();
+            resultado = estado.executeQuery("SELECT * FROM `productos`");
             
-            }
-          
-        }
-        if(verificacion==false){
-            System.out.println("el producto ingresado es incorrecto ");
-            }
+            while (resultado.next()){
+                System.out.println(resultado.getString("nombre") +"\t"+ resultado.getString("cantidad")
+                        +"\t"+ resultado.getString("valor") +"\t");
+            
+                   
+           }   
+            
+         } catch (SQLException ex) {
+            System.out.println("Error de mysql");
+          } catch (Exception e) {
+            System.out.println("Se ha encontrado un error de tipo: "
+                    + e.getMessage());
+            
+         }   
+           
         
         
     }
     
-    
-    public void realizar_venta(producto[] productos,int num_productos){
-       
-        Scanner entrada=new Scanner(System.in);
-        String nombre;
-        
-        
-        int i;
-        int cantidad_venta;
-        int resta=0;
-        boolean verificacion=false;
-        System.out.println("Por favor ingrese solo el nombre del producto que "
-                + "desea vender ");
-        nombre=entrada.nextLine();
-        System.out.println("Por favor ingrese la cantidad que desea vender ");
-        cantidad_venta=entrada.nextInt();
-        
-        for(i=0;i<num_productos;i++){
-            if(productos[i].nombre.equals(nombre)){
-            resta=productos[i].cantidad-cantidad_venta;
-            productos[i].unidades_vendidas+=cantidad_venta;
-            productos[i].cantidad-=resta;
-            verificacion=true;
+    public void buscar_producto(){
+       int bandera=0;
+       try {
             
-            }
+           
+            System.out.println("Digite el nombre del producto que quiere buscar: ");
+            nombre = lector.nextLine();
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url,user,password);
+               
             
-            if(verificacion==false){
-            System.out.println("el producto ingresado es incorrecto o no existe");
-            }
+            ResultSet resultado;           
+            Statement estado = con.createStatement();
+            resultado = estado.executeQuery("SELECT * FROM `productos` WHERE `nombre` LIKE '"+nombre+"'");
+            while (resultado.next()){
+                comparador=resultado.getString("nombre");
                 
+                System.out.println(resultado.getString("nombre") +"\t"+ resultado.getString("cantidad")
+                        +"\t"+ resultado.getString("valor") +"\t");
+                
+                if(nombre.equals(comparador)){
+                    bandera=bandera+1;}
+                //System.out.println(bandera);    
+                    
+            }
+            if(bandera==0){System.out.println("el producto ingresado no existe");}
             
+         } catch (SQLException ex) {
+            System.out.println("Error de mysql");
+          } catch (Exception e) {
+            System.out.println("Se ha encontrado un error de tipo: "
+                    + e.getMessage());
+            
+         } 
+        
+        
+    
+    }
+    
+    public void eliminar_producto(){
+       
+    try {
+            
+        
+        
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url,user,password);
+            ResultSet resultado;           
+            Statement estado = con.createStatement();
+            
+            System.out.println("Digite un nombre para eliminar: ");
+            nombre = lector.nextLine();
+            estado.executeUpdate("DELETE FROM `productos` WHERE `nombre` LIKE '"+nombre+"'");
+            
+            
+            
+         } catch (SQLException ex) {
+            System.out.println("Error de mysql");
+          } catch (Exception e) {
+            System.out.println("Se ha encontrado un error de tipo: "
+                    + e.getMessage());
+            
+         } 
           
-        }
+       
         
     }
     
     
-    public void mostrar_ganancias(producto[] productos,int num_productos){
+    public void realizar_venta(){
        
-       
-        
-        
+               
         int i;
-        int total=0;
-        
-        for(i=0;i<num_productos;i++){
-            System.out.println("Se vendieron  "+productos[i].unidades_vendidas+
-                    "de "+productos[i].nombre);
-            System.out.println("con una ganancia de "+productos[i].precio_unidad*productos[i].unidades_vendidas);
-            total+=productos[i].precio_unidad*productos[i].unidades_vendidas;
-            System.out.println("El total de lo vendido es de "+total);
+        int cantidad_venta=0;
+        int num_productosRestantes=0;
+        int bandera=0;
+        int cantidad_producto=0;
+        int valor_venta=0;
+        int precio=0;
+         try {
+                        
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url,user,password);
+            ResultSet resultado;           
+            Statement estado = con.createStatement();
+            System.out.println("Digite el nombre del producto que desea vender: ");
+            nombre = lector.nextLine();
+                      
+            resultado = estado.executeQuery("SELECT * FROM `productos` WHERE `nombre` LIKE '"+nombre+"'");
+            while (resultado.next()){
+                
+                comparador=resultado.getString("nombre");
+                System.out.println(resultado.getString("nombre") +"\t"+ resultado.getString("cantidad")
+                        +"\t"+ resultado.getString("valor") +"\t");
+                
+                if(nombre.equals(comparador)){
+                    cantidad_producto=resultado.getInt("cantidad");
+                    precio=resultado.getInt("valor");
+                    bandera=bandera+1;}
+                //System.out.println(bandera);    
+                    
+            }
+            if(bandera==0){System.out.println("el producto ingresado no existe");}
+            else{System.out.println("Ingrese la cantidad del producto a vender");
+            cantidad_venta=lector.nextInt();
+            lector.nextLine();
+            valor_venta=cantidad_venta*precio;
+            num_productosRestantes=cantidad_producto-cantidad_venta;
+            if(num_productosRestantes==0){estado.executeUpdate("DELETE FROM `productos` WHERE `nombre` LIKE '"+nombre+"'");}
+            if(num_productosRestantes<0){System.out.println("no hay tantos productos");}
+            else
+            {estado.executeUpdate("UPDATE productos SET cantidad = '"+num_productosRestantes+"' WHERE nombre='"+nombre+"'");
+            ganancias+=valor_venta;
             
-        }
+            }
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+         } catch (SQLException ex) {
+            System.out.println("Error de mysql");
+          } catch (Exception e) {
+            System.out.println("Se ha encontrado un error de tipo: "
+                    + e.getMessage());
+            
+         } 
+                    
+          
         
+        
+    }
+    
+    
+    public void mostrar_ganancias(){
+       
+       System.out.println("El total de ganancias es: "+ganancias);
+             
+                        
+        
+        
+    }    
+    public void ingresar_producto(){
+        
+        int bandera=0;
+        int cantidad_producto=0;
+       try {
+                        
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url,user,password);
+            ResultSet resultado;           
+            Statement estado = con.createStatement();
+            System.out.println("Digite un nombre: ");
+            nombre = lector.nextLine();
+            resultado = estado.executeQuery("SELECT * FROM `productos` WHERE `nombre` LIKE '"+nombre+"'");
+            while (resultado.next()){
+                comparador=resultado.getString("nombre");
+                
+                System.out.println(resultado.getString("nombre") +"\t"+ resultado.getString("cantidad")
+                        +"\t"+ resultado.getString("valor") +"\t");
+                
+                if(nombre.equals(comparador)){
+                    cantidad_producto=resultado.getInt("cantidad");
+                    bandera=bandera+1;}
+                //System.out.println(bandera);    
+                    
+            }
+            if(bandera==1){
+            System.out.println("El producto ya existe ingrese la cantidad a agregar de productos: ");
+            cantidad = lector.nextInt();
+            lector.nextLine();
+            estado.executeUpdate("UPDATE productos SET cantidad = '"+(cantidad_producto+cantidad)+"' WHERE nombre='"+nombre+"'");
+            }
+            else{
+            System.out.println("Digite la cantidad: ");
+            cantidad=lector.nextInt();
+            lector.nextLine();
+            System.out.println("Digite el valor del producto individual: ");
+            valor=lector.nextInt();
+            lector.nextLine();
+            estado.executeUpdate("INSERT INTO `productos` VALUES ('"+nombre+"', '"+cantidad+"', '"+valor+"')");};
+            
+            
+            
+         } catch (SQLException ex) {
+            System.out.println("Error de mysql");
+          } catch (Exception e) {
+            System.out.println("Se ha encontrado un error de tipo: "
+                    + e.getMessage());
+            
+         } 
+            
         
     
     }

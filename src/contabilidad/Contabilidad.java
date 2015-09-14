@@ -10,6 +10,7 @@ package contabilidad;
  * @author practi10
  */
 import java.util.Scanner;
+import java.sql.*;
 public class Contabilidad {
 
     /**
@@ -18,7 +19,7 @@ public class Contabilidad {
     public static void main(String[] args) {
       
         Scanner entrada=new Scanner(System.in);
-        producto[] productos = new producto[100];
+        //producto[] productos = new producto[100];
         menu menu_principal= new menu();
         
         
@@ -26,11 +27,37 @@ public class Contabilidad {
         int i=0;
         int num_producto=0;
         int productos_ingresados=0;
+        boolean verificacion=false;
         
+        Scanner lector = new Scanner(System.in);
+        String user = "root";
+        String password = "12345";
+        String url = "jdbc:mysql://localhost/inventario";
+        String user2 = "ocampojohny";
+        String password2 = "25312e";
+        String url2 = "jdbc:mysql://db4free.net/agendaxi8";
+        String nombre, apellido, tel;
    
-        
+        try {
+            //Prueba de conexion
+            System.out.println("Conectando a base de datos...");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url,user,password);
+            System.out.println("Conexión exitosa...");
+            
+            
+            
+            
+         } catch (SQLException ex) {
+            System.out.println("Error de mysql");
+          } catch (Exception e) {
+            System.out.println("Se ha encontrado un error de tipo: "
+                    + e.getMessage());
+            
+         }   
         
         do{
+        
         
             
         menu_principal.mostrar_menu();
@@ -39,28 +66,29 @@ public class Contabilidad {
         
         switch(num_menu){
             case 1: 
-                productos_ingresados=num_producto;
-                productos[num_producto]= new producto();
-                productos[num_producto].cargar_datos();
-                num_producto++;                
+                  menu_principal.ingresar_producto();
+                //productos[num_producto]= new producto();
+                //productos[num_producto].cargar_datos();
+                              
                 break;
             case 2:
                 
-                menu_principal.buscar_producto(productos, num_producto);
+                menu_principal.buscar_producto();
                 
                 break;
             case 3:
-                menu_principal.eliminar_producto(productos, num_producto);
+                menu_principal.eliminar_producto();
+                
                 break;
             case 4:
-                menu_principal.mostrar_inventario(productos, num_producto);
+                menu_principal.mostrar_inventario();
                 break;
             case 5:
-                menu_principal.realizar_venta(productos, num_producto);
+                menu_principal.realizar_venta();
                 break;
                 
             case 6:
-                  menu_principal.mostrar_ganancias(productos, num_producto);
+                  menu_principal.mostrar_ganancias();
                 break;
             default:
                 System.out.println("El valor ingresado es incorrecto ");
