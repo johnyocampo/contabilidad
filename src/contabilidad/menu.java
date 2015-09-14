@@ -23,7 +23,7 @@ public class menu {
         String url = "jdbc:mysql://localhost/inventario";
         String user2 = "ocampojohny";
         String password2 = "cangrejo.1";
-        String url2 = "jdbc:mysql://db4free.net/inventario";
+            String url2 = "jdbc:mysql://db4free.net/base_ocampo";
         String nombre;
         int cantidad, valor;
         String comparador;
@@ -51,7 +51,7 @@ public class menu {
             //Prueba de conexion
             
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,user,password);
+            Connection con = DriverManager.getConnection(url2,user2,password2);
                
             
             ResultSet resultado;           
@@ -85,7 +85,7 @@ public class menu {
             System.out.println("Digite el nombre del producto que quiere buscar: ");
             nombre = lector.nextLine();
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,user,password);
+            Connection con = DriverManager.getConnection(url2,user2,password2);
                
             
             ResultSet resultado;           
@@ -123,7 +123,7 @@ public class menu {
         
         
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,user,password);
+            Connection con = DriverManager.getConnection(url2,user2,password2);
             ResultSet resultado;           
             Statement estado = con.createStatement();
             
@@ -159,7 +159,7 @@ public class menu {
          try {
                         
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,user,password);
+            Connection con = DriverManager.getConnection(url2,user2,password2);
             ResultSet resultado;           
             Statement estado = con.createStatement();
             System.out.println("Digite el nombre del producto que desea vender: ");
@@ -230,7 +230,7 @@ public class menu {
        try {
                         
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,user,password);
+            Connection con = DriverManager.getConnection(url2,user2,password2);
             ResultSet resultado;           
             Statement estado = con.createStatement();
             System.out.println("Digite un nombre: ");

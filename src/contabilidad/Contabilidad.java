@@ -34,15 +34,15 @@ public class Contabilidad {
         String password = "12345";
         String url = "jdbc:mysql://localhost/inventario";
         String user2 = "ocampojohny";
-        String password2 = "25312e";
-        String url2 = "jdbc:mysql://db4free.net/agendaxi8";
+        String password2 = "cangrejo.1";
+        String url2 = "jdbc:mysql://db4free.net/base_ocampo";
         String nombre, apellido, tel;
    
         try {
             //Prueba de conexion
             System.out.println("Conectando a base de datos...");
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url,user,password);
+            Connection con = DriverManager.getConnection(url2,user2,password2);
             System.out.println("Conexión exitosa...");
             
             
